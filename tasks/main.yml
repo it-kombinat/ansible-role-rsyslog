@@ -1,0 +1,57 @@
+---
+# tasks file for rsyslog
+- name: uninstall conflicting software
+  package:
+    name: systemd-logger
+    state: absent
+
+- name: install software
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ rsyslog_packages[ansible_distribution ~ '-' ~ ansible_distribution_major_version]
+      | default(rsyslog_packages[ansible_distribution]
+      | default(rsyslog_packages['default'] )) }}"
+
+- name: configuring software
+  template:
+    src: rsyslog.conf.j2
+    dest: /etc/rsyslog.conf
+  notify:
+    - restart rsyslog
+
+- name: make configuration directory
+  file:
+    name: /etc/rsyslog.d/
+    state: directory
+
+- name: start and enable software
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items:
+    - "{{ rsyslog_services[ansible_distribution ~ '-' ~ ansible_distribution_major_version]
+      | default(rsyslog_services[ansible_distribution]
+      | default(rsyslog_services['default'] )) }}"
+  when:
+    - ansible_virtualization_type != "docker"
+
+- name: Syslog-Generator-Script
+  copy: src="{{ item }}" dest="/var/tmp/{{ item }}" mode=755
+  with_items:
+    - syslog-generator.sh
+
+- name: Systemd - Service file for syslog-generator
+  template: src="{{ item }}" dest="/etc/systemd/system/{{ item }}" mode=755
+  with_items:
+      - syslog-generator.service
+
+- name: enable service syslog-generator.service and ensure it is not masked
+  systemd:
+    name: syslog-generator.service
+    enabled: yes
+    state: started
+    daemon_reload: yes
+    masked: no

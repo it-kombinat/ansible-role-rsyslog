@@ -1,0 +1,10 @@
+[Unit]
+Description=Syslog-Generator
+
+[Service]
+Type=oneshot
+ExecStart=/var/tmp/syslog-generator.sh start
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
