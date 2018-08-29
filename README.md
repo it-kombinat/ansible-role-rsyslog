@@ -14,7 +14,6 @@ Role Variables
 
 You can (probably better) set these variables in group_vars.
 
-Install this role using `galaxy install robertdebock.rsyslog`.
 
 License
 -------
