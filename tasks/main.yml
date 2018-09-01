@@ -42,11 +42,15 @@
   copy: src="{{ item }}" dest="/var/tmp/{{ item }}" mode=755
   with_items:
     - syslog-generator.sh
+  when:
+    - syslog_gen_service
 
 - name: Systemd - Service file for syslog-generator
   template: src="{{ item }}" dest="/etc/systemd/system/{{ item }}" mode=755
   with_items:
       - syslog-generator.service
+  when:
+    - syslog_gen_service
 
 - name: enable service syslog-generator.service and ensure it is not masked
   systemd:
@@ -55,3 +59,5 @@
     state: started
     daemon_reload: yes
     masked: no
+  when:
+    - syslog_gen_service

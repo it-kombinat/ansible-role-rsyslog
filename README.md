@@ -1,19 +1,21 @@
 rsyslog
 =========
 
-Provides rsyslog for your system.
-
+Provides rsyslog for your system and enabling an syslog generator script as service.
 
 Requirements
 ------------
 
-Access to a repository containing packages, likely on the internet.
+ - Ansible >= 2.4
+ - Access to a repository containing packages, likely on the internet.
 
 Role Variables
 --------------
 
-You can (probably better) set these variables in group_vars.
-
+| Name           | Default Value | Description                        |
+| -------------- | ------------- | -----------------------------------|
+| `rsyslog_remote` |  server1.example.com | rsyslog server |
+| `syslog_gen_service` | true  | Enable syslog generator script |
 
 License
 -------

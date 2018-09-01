@@ -8,3 +8,6 @@
 # the ipaddress of the receiving rsyslog server.
 # Not setting this variable will not forward logs.
 # rsyslog_remote: server1.example.com
+#
+# Syslog generator script - setup an enable syslog generator script
+syslog_gen_service: true
